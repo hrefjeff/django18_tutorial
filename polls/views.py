@@ -2,33 +2,55 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.core.urlresolvers import reverse
+from django.views import generic
 
-from .models import Question
+from .models import Choice, Question
 
-def index(request):
-    # latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    # output = ', '.join([p.question_text for p in latest_question_list])
-    # return HttpResponse(output)
-    # ------OBSOLETE WAY-----    
-    # latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    # template = loader.get_template('polls/index.html')
-    # context = RequestContext(request,
-    #     {
-    #         'latest_question_list': latest_question_list,
-    #     })
-    # return HttpResponse(template.render(context))
-    # ------SHORTCUT-----    
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]    
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'polls/index.html', context)
+#=====Commented out at Tutorial Part 4
+# def index(request):
+#     # latest_question_list = Question.objects.order_by('-pub_date')[:5]
+#     # output = ', '.join([p.question_text for p in latest_question_list])
+#     # return HttpResponse(output)
+#     # ------OBSOLETE WAY-----    
+#     # latest_question_list = Question.objects.order_by('-pub_date')[:5]
+#     # template = loader.get_template('polls/index.html')
+#     # context = RequestContext(request,
+#     #     {
+#     #         'latest_question_list': latest_question_list,
+#     #     })
+#     # return HttpResponse(template.render(context))
+#     # ------SHORTCUT-----    
+#     latest_question_list = Question.objects.order_by('-pub_date')[:5]    
+#     context = {'latest_question_list': latest_question_list}
+#     return render(request, 'polls/index.html', context)
 
-def detail(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'question': question})
 
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'question': question})
+# def detail(request, question_id):
+#     question = get_object_or_404(Question, pk=question_id)
+#     return render(request, 'polls/detail.html', {'question': question})
+
+# def results(request, question_id):
+#     question = get_object_or_404(Question, pk=question_id)
+#     return render(request, 'polls/results.html', {'question': question})
+
+#display a list of objects
+class IndexView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Question.objects.order_by('-pub_date')[:5]
+
+#display a detail page for a particular type of object.
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
+
+#display a detail page for a particular type of object.
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
