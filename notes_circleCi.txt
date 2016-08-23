@@ -1,0 +1,2 @@
+1) needed to add circle.yml file
+2) needed to add requirements.txt that specifies which django version you wanted to use (and other dependencies are shown here)
