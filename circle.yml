@@ -5,9 +5,8 @@ machine:
     America/Los_Angeles # Set the timezone
 
   # Version of ruby to use
-  machine:
-    python:
-      version: 2.7.10
+  python:
+    version: 2.7.10
 
   # Override /etc/hosts
   hosts:
